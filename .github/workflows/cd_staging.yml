@@ -7,13 +7,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Continous Deployment
-        # env:
-        #   PAT: ${{ secrets.PAT }}
+      - name: Set up SSH key
         run: |
-          echo ${{ secrets.SSH_PRIVATE_KEY }} &> ~/ssh_key
-          ssh -i  ~/ssh_key avtechnosys02@35.193.96.53
-          git pull origin main
-          pnpm install
-          pnpm build
-          pm2 restart all
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add SSH host to known hosts
+        run: |
+          ssh-keyscan -H 35.193.96.53 >> ~/.ssh/known_hosts
+
+      - name: Deploy Application
+        run: |
+          ssh -i ~/.ssh/id_rsa avtechnosys02@35.193.96.53 << 'EOF'
+            git pull origin main
+            pnpm install
+            pnpm build
+            pm2 restart all
+          EOF
