@@ -4,30 +4,15 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  redeploy_everything:
     runs-on: ubuntu-latest
+    name: Deploy to everything on staging cluster
     steps:
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Add SSH host to known hosts
-        run: |
-          ssh-keyscan -H 35.193.96.53 >> ~/.ssh/known_hosts
-
-      - name: Install pnpm and pm2
-        run: |
-          curl -fsSL https://get.pnpm.io/install.sh | sh -  # Install pnpm
-          npm install -g pm2  # Install pm2 globally
-
-      - name: Deploy Application
-        run: |
-          ssh -i ~/.ssh/id_rsa avtechnosys02@35.193.96.53 << 'EOF'
-            cd /home/avtechnosys02/devops-week-25-monorepo
-            git pull origin main
-            pnpm install
-            pnpm build
-            pm2 restart all
-          EOF
+      - run: |
+          echo "{{ secrets.SSH_PRIVATE_KEY  }}" &> ~/ssh_key
+          echo "yes" | ssh - i ~/ssh_key avtechonsys02@35.193.96.53
+          cd devops-week-25-monorepo
+          git pull
+          pnpm install
+          pnpm run build
+          pm2 restart all
