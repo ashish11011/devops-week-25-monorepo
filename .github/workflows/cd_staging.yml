@@ -17,9 +17,15 @@ jobs:
         run: |
           ssh-keyscan -H 35.193.96.53 >> ~/.ssh/known_hosts
 
+      - name: Install pnpm and pm2
+        run: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh -  # Install pnpm
+          npm install -g pm2  # Install pm2 globally
+
       - name: Deploy Application
         run: |
           ssh -i ~/.ssh/id_rsa avtechnosys02@35.193.96.53 << 'EOF'
+            cd /home/avtechnosys02/your-repo-directory  # Replace this with the actual path to your repo
             git pull origin main
             pnpm install
             pnpm build
