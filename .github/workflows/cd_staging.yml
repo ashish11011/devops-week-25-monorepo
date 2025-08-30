@@ -11,7 +11,8 @@ jobs:
         # env:
         #   PAT: ${{ secrets.PAT }}
         run: |
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} avtechnosys02@35.193.96.53
+          echo ${{ secrets.SSH_PRIVATE_KEY }} &> ~/ssh_key
+          ssh -i  ~/ssh_key avtechnosys02@35.193.96.53
           git pull origin main
           pnpm install
           pnpm build
