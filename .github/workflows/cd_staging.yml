@@ -9,7 +9,7 @@ jobs:
     name: Deploy to everything on staging cluster
     steps:
       - run: |
-          echo "{{ secrets.SSH_PRIVATE_KEY  }}" &> ~/ssh_key
+          echo "&{{ secrets.SSH_PRIVATE_KEY  }}" &> ~/ssh_key
           echo "yes" | ssh - i ~/ssh_key avtechonsys02@35.193.96.53
           cd devops-week-25-monorepo
           git pull
