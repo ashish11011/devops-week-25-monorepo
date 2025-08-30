@@ -25,7 +25,7 @@ jobs:
       - name: Deploy Application
         run: |
           ssh -i ~/.ssh/id_rsa avtechnosys02@35.193.96.53 << 'EOF'
-            cd /home/avtechnosys02/your-repo-directory  # Replace this with the actual path to your repo
+            cd /home/avtechnosys02/devops-week-25-monorepo
             git pull origin main
             pnpm install
             pnpm build
