@@ -13,10 +13,10 @@ jobs:
           chmod 600 ~/ssh_key
           mkdir -p ~/.ssh
           ssh-keyscan 35.193.96.53 >> ~/.ssh/known_hosts
-          ssh -i ~/ssh_key avtechnosys02@35.193.96.53
-          ls
-          cd  ~/devops-week-25-monorepo/
-          git pull
-          pnpm install
-          pnpm run build
-          pm2 restart all
+          ssh -T -i ~/ssh_key avtechnosys02@35.193.96.53 << 'EOF'
+            cd ~/devops-week-25-monorepo
+            git pull
+            pnpm install
+            pnpm run build
+            pm2 restart all
+          EOF
