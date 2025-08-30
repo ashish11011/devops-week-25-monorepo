@@ -9,8 +9,11 @@ jobs:
     name: Deploy to everything on staging cluster
     steps:
       - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY  }}" &> ~/ssh_key
-          echo "yes" | ssh -i ~/ssh_key avtechonsys02@35.193.96.53
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          mkdir -p ~/.ssh
+          ssh-keyscan 35.193.96.53 >> ~/.ssh/known_hosts
+          ssh -i ~/ssh_key avtechonsys02@35.193.96.53
           cd devops-week-25-monorepo
           git pull
           pnpm install
