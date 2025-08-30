@@ -10,13 +10,13 @@ jobs:
     steps:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
-          chmod 600 ~/ssh_key
+          chmod 700 ~/ssh_key
           mkdir -p ~/.ssh
           ssh-keyscan 35.193.96.53 >> ~/.ssh/known_hosts
           ssh -T -i ~/ssh_key avtechnosys02@35.193.96.53 << 'EOF'
-            source ~/.bashrc
-            cd ~/devops-week-25-monorepo
-            git pull
+          cd ~/devops-week-25-monorepo
+          git pull origin main
+          export PATH=/home/avtechnosys02/.nvm/versions/node/v20.19.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games            
             pnpm install
             pnpm run build
             pm2 restart all
